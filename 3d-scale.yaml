@@ -1,0 +1,49 @@
+# Board: Espressif ESP32-C6-DevKitM-1 (Espressif)
+# Definition: definitions/boards/esp32-c6-devkitm-1/manifest.yaml
+
+esphome:
+  name: 3d-scale
+  friendly_name: 3D_scale
+  on_boot:
+    - priority: -100
+      then:
+        - light.turn_on:
+            id: board_led
+            red: 0%
+            green: 100%
+            blue: 0%
+            brightness: 100%
+
+esp32:
+  variant: esp32c6
+  flash_size: 8MB
+  framework:
+    type: esp-idf
+
+light:
+  - platform: esp32_rmt_led_strip
+    id: board_led
+    name: "Board LED"
+    pin: GPIO8
+    num_leds: 1
+    chipset: WS2812
+    rgb_order: GRB
+    restore_mode: ALWAYS_OFF
+
+logger:
+
+api:
+  encryption:
+    key: "ClOvvtVhBsckyJJ20eVeoNxplBP8m3Vo89UBT5OE9ZA="
+
+ota:
+  - platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: 3D_scale Fallback Hotspot
+    password: "2SClmQn2D0pB"
+
+captive_portal:
