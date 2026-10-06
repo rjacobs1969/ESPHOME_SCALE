@@ -9,8 +9,8 @@ esphome:
       then:
         - light.turn_on:
             id: board_led
-            red: 0%
-            green: 100%
+            red: 100%
+            green: 0%
             blue: 0%
             brightness: 100%
 
@@ -19,6 +19,83 @@ esp32:
   flash_size: 8MB
   framework:
     type: esp-idf
+
+i2c:
+  sda: GPIO4
+  scl: GPIO5
+  scan: true
+
+globals:
+  - id: raw_last
+    type: float
+    initial_value: '0'
+  - id: tare_offset
+    type: float
+    initial_value: '0'
+
+font:
+  - file: "gfonts://Roboto"
+    id: display_font
+    size: 14
+
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    address: 0x3C
+    update_interval: 100ms
+    lambda: |-
+      if (id(hx711_raw).has_state()) {
+        it.printf(0, 0, id(display_font), "Weight: %.1f g", id(hx711_raw).state);
+      } else {
+        it.print(0, 0, id(display_font), "Weight: --");
+      }
+      if (id(ip_address).has_state()) {
+        it.printf(0, 20, id(display_font), "IP: %s", id(ip_address).state.c_str());
+      } else {
+        it.print(0, 20, id(display_font), "Waiting for WiFi");
+      }
+      std::string pressed_buttons;
+      if (id(button_1).state) pressed_buttons += "1";
+      if (id(button_2).state) pressed_buttons += (pressed_buttons.empty() ? "2" : ", 2");
+      if (id(button_3).state) pressed_buttons += (pressed_buttons.empty() ? "3" : ", 3");
+      if (id(button_4).state) pressed_buttons += (pressed_buttons.empty() ? "4" : ", 4");
+      it.printf(0, 40, id(display_font), "Buttons: %s",
+                pressed_buttons.empty() ? "-" : pressed_buttons.c_str());
+
+sensor:
+  - platform: hx711
+    id: hx711_raw
+    name: "Weight"
+    internal: true
+    unit_of_measurement: "g"
+    accuracy_decimals: 1
+    dout_pin: GPIO11
+    clk_pin: GPIO10
+    gain: 128
+    update_interval: 17ms
+    on_raw_value:
+      then:
+        - lambda: id(raw_last) = x;
+    filters:
+      # 100 g = 56000 raw -> 560 raw per gram
+      - lambda: return (x - id(tare_offset)) / 560.0f;
+    on_value_range:
+      - above: 90.0
+        then:
+          - light.turn_on:
+              id: board_led
+              red: 0%
+              green: 0%
+              blue: 100%
+              brightness: 100%
+      - below: 90.0
+        then:
+          - light.turn_on:
+              id: board_led
+              red: 0%
+              green: 100%
+              blue: 0%
+              brightness: 100%
 
 light:
   - platform: esp32_rmt_led_strip
@@ -29,6 +106,39 @@ light:
     chipset: WS2812
     rgb_order: GRB
     restore_mode: ALWAYS_OFF
+
+binary_sensor:
+  - platform: gpio
+    id: button_1
+    internal: true
+    on_press:
+      then:
+        - lambda: id(tare_offset) = id(raw_last);
+    pin:
+      number: GPIO6
+      mode: INPUT_PULLUP
+      inverted: true
+  - platform: gpio
+    id: button_2
+    internal: true
+    pin:
+      number: GPIO7
+      mode: INPUT_PULLUP
+      inverted: true
+  - platform: gpio
+    id: button_3
+    internal: true
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: true
+  - platform: gpio
+    id: button_4
+    internal: true
+    pin:
+      number: GPIO1
+      mode: INPUT_PULLUP
+      inverted: true
 
 logger:
 
@@ -42,8 +152,21 @@ ota:
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
+  on_connect:
+    - light.turn_on:
+        id: board_led
+        red: 0%
+        green: 100%
+        blue: 0%
+        brightness: 100%
   ap:
     ssid: 3D_scale Fallback Hotspot
     password: "2SClmQn2D0pB"
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "3D Scale IP Address"
+      id: ip_address
 
 captive_portal:

@@ -1,0 +1,10 @@
+pinout esp32-io
+
+4  SSD1306 SDA
+5  SSD1306 SCL
+
+6  BUTTON 1
+7  BUTTON 2
+0  BUTTON 3
+1  BUTTON 4
+
