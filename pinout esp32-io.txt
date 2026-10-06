@@ -8,3 +8,6 @@ pinout esp32-io
 0  BUTTON 3
 1  BUTTON 4
 
+10 clk HX711 A+B
+11 DT HX711  A
+12 DT HX711  B

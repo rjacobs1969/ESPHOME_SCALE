@@ -45,7 +45,7 @@ display:
     update_interval: 100ms
     lambda: |-
       if (id(hx711_raw).has_state()) {
-        it.printf(0, 0, id(display_font), "Weight: %.1f g", id(hx711_raw).state);
+        it.printf(0, 0, id(display_font), "Weight: %.0f g", roundf(id(hx711_raw).state / 10.0f) * 10.0f);
       } else {
         it.print(0, 0, id(display_font), "Weight: --");
       }
@@ -62,40 +62,43 @@ display:
       it.printf(0, 40, id(display_font), "Buttons: %s",
                 pressed_buttons.empty() ? "-" : pressed_buttons.c_str());
 
+external_components:
+  - source:
+      type: local
+      path: components
+    components: [hx711_dual]
+
 sensor:
-  - platform: hx711
+  - platform: hx711_dual
     id: hx711_raw
     name: "Weight"
     internal: true
     unit_of_measurement: "g"
     accuracy_decimals: 1
-    dout_pin: GPIO11
+    dout_pin_a: GPIO11
+    dout_pin_b: GPIO12
     clk_pin: GPIO10
     gain: 128
     update_interval: 17ms
-    on_raw_value:
-      then:
-        - lambda: id(raw_last) = x;
     filters:
+      # remember the summed raw value for tare
+      - lambda: |-
+          id(raw_last) = x;
+          return x;
       # 100 g = 56000 raw -> 560 raw per gram
       - lambda: return (x - id(tare_offset)) / 560.0f;
-    on_value_range:
-      - above: 90.0
-        then:
-          - light.turn_on:
-              id: board_led
-              red: 0%
-              green: 0%
-              blue: 100%
-              brightness: 100%
-      - below: 90.0
-        then:
-          - light.turn_on:
-              id: board_led
-              red: 0%
-              green: 100%
-              blue: 0%
-              brightness: 100%
+    on_value:
+      then:
+        - lambda: |-
+            // x is the tared weight in grams (sum of both HX711)
+            static int last = -1;
+            int now = x > 90.0f ? 1 : 0;
+            if (now == last) return;
+            last = now;
+            auto call = id(board_led).turn_on();
+            call.set_rgb(0.0f, now ? 0.0f : 1.0f, now ? 1.0f : 0.0f);
+            call.set_brightness(1.0f);
+            call.perform();
 
 light:
   - platform: esp32_rmt_led_strip
