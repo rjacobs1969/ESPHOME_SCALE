@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1350" height="1000" viewBox="0 0 1350 1000" font-family="DejaVu Sans, Arial, sans-serif">
+  <defs>
+    <g id="gnd" stroke="#222" stroke-width="2">
+      <line x1="-11" y1="0" x2="11" y2="0"/><line x1="-7" y1="5" x2="7" y2="5"/><line x1="-3" y1="10" x2="3" y2="10"/>
+    </g>
+    <g id="vcc">
+      <line x1="-10" y1="0" x2="10" y2="0" stroke="#c0392b" stroke-width="2.5"/>
+      <text x="0" y="-6" font-size="12" text-anchor="middle" fill="#c0392b" font-weight="bold">3V3</text>
+    </g>
+    <g id="btn" stroke="#444" stroke-width="2" fill="#fff">
+      <circle cx="0" cy="0" r="4"/><circle cx="0" cy="34" r="4"/>
+      <line x1="-14" y1="4" x2="-14" y2="30"/><line x1="-22" y1="17" x2="-14" y2="17"/>
+    </g>
+  </defs>
+  <rect width="1350" height="1000" fill="#ffffff"/>
+
+  <text x="30" y="45" font-size="26" font-weight="bold" fill="#222">3D Scale — wiring</text>
+  <text x="30" y="70" font-size="13" fill="#666">ESP32-C6-DevKitM-1 · dual HX711 · SSD1306</text>
+
+  <!-- ===== ESP32 board ===== -->
+  <rect x="600" y="220" width="300" height="540" rx="10" fill="#1f3a5f" stroke="#0e2238" stroke-width="2"/>
+  <text x="750" y="440" font-size="24" font-weight="bold" fill="#fff" text-anchor="middle">ESP32-C6</text>
+  <text x="750" y="466" font-size="15" fill="#cfe0f5" text-anchor="middle">DevKitM-1</text>
+  <rect x="728" y="560" width="44" height="22" rx="4" fill="#fff" stroke="#9cf"/>
+  <circle cx="750" cy="571" r="7" fill="#4caf50"/>
+  <text x="750" y="604" font-size="12" fill="#cfe0f5" text-anchor="middle">GPIO8 · onboard WS2812 LED</text>
+  <text x="750" y="621" font-size="11" fill="#9fb6d3" text-anchor="middle">red = boot · green = WiFi</text>
+  <text x="750" y="637" font-size="11" fill="#9fb6d3" text-anchor="middle">blue = weight &gt; 90 g</text>
+  <text x="750" y="680" font-size="11" fill="#9fb6d3" text-anchor="middle">3V3 / GND pins power all modules</text>
+
+  <!-- pin labels -->
+  <g font-size="13" fill="#fff" font-weight="bold">
+    <text x="612" y="290">GPIO11</text>
+    <text x="612" y="420">GPIO10</text>
+    <text x="612" y="550">GPIO12</text>
+    <text x="888" y="295" text-anchor="end">GPIO4</text>
+    <text x="888" y="345" text-anchor="end">GPIO5</text>
+    <text x="660" y="242" text-anchor="middle">GPIO3</text>
+    <text x="840" y="242" text-anchor="middle">GPIO2</text>
+    <text x="630" y="750" text-anchor="middle">GPIO6</text>
+    <text x="710" y="750" text-anchor="middle">GPIO7</text>
+    <text x="790" y="750" text-anchor="middle">GPIO0</text>
+    <text x="870" y="750" text-anchor="middle">GPIO1</text>
+  </g>
+
+  <!-- ===== HX711 modules ===== -->
+  <g>
+    <rect x="300" y="250" width="180" height="110" rx="6" fill="#2e7d32" stroke="#1b5e20" stroke-width="2"/>
+    <text x="390" y="305" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">HX711 A</text>
+    <text x="390" y="322" font-size="11" fill="#c8e6c9" text-anchor="middle">gain 128</text>
+    <rect x="300" y="470" width="180" height="110" rx="6" fill="#2e7d32" stroke="#1b5e20" stroke-width="2"/>
+    <text x="390" y="525" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">HX711 B</text>
+    <text x="390" y="542" font-size="11" fill="#c8e6c9" text-anchor="middle">gain 128</text>
+    <g font-size="11" fill="#fff">
+      <text x="390" y="266" text-anchor="middle">VCC</text><text x="390" y="353" text-anchor="middle">GND</text>
+      <text x="390" y="486" text-anchor="middle">VCC</text><text x="390" y="573" text-anchor="middle">GND</text>
+      <text x="470" y="289" text-anchor="end">DT</text><text x="470" y="329" text-anchor="end">SCK</text>
+      <text x="470" y="509" text-anchor="end">SCK</text><text x="470" y="549" text-anchor="end">DT</text>
+      <text x="308" y="274">E+</text><text x="308" y="299">E−</text><text x="308" y="324">A−</text><text x="308" y="349">A+</text>
+      <text x="308" y="494">E+</text><text x="308" y="519">E−</text><text x="308" y="544">A−</text><text x="308" y="569">A+</text>
+    </g>
+    <!-- power -->
+    <g stroke="#555" stroke-width="2">
+      <line x1="390" y1="250" x2="390" y2="232"/><line x1="390" y1="360" x2="390" y2="380"/>
+      <line x1="390" y1="470" x2="390" y2="452"/><line x1="390" y1="580" x2="390" y2="600"/>
+    </g>
+    <use xlink:href="#vcc" x="390" y="232"/><use xlink:href="#gnd" x="390" y="380"/>
+    <use xlink:href="#vcc" x="390" y="452"/><use xlink:href="#gnd" x="390" y="600"/>
+  </g>
+
+  <!-- ===== Load cells ===== -->
+  <g>
+    <rect x="60" y="250" width="140" height="110" rx="6" fill="#eceff1" stroke="#90a4ae" stroke-width="2"/>
+    <text x="130" y="300" font-size="15" font-weight="bold" fill="#333" text-anchor="middle">Load cell A</text>
+    <rect x="60" y="470" width="140" height="110" rx="6" fill="#eceff1" stroke="#90a4ae" stroke-width="2"/>
+    <text x="130" y="520" font-size="15" font-weight="bold" fill="#333" text-anchor="middle">Load cell B</text>
+    <g stroke-width="3.5" fill="none">
+      <line x1="200" y1="270" x2="300" y2="270" stroke="#d32f2f"/>
+      <line x1="200" y1="295" x2="300" y2="295" stroke="#222"/>
+      <line x1="200" y1="320" x2="300" y2="320" stroke="#555" stroke-width="5.5"/><line x1="200" y1="320" x2="300" y2="320" stroke="#fff" stroke-width="3"/>
+      <line x1="200" y1="345" x2="300" y2="345" stroke="#2e7d32"/>
+      <line x1="200" y1="490" x2="300" y2="490" stroke="#d32f2f"/>
+      <line x1="200" y1="515" x2="300" y2="515" stroke="#222"/>
+      <line x1="200" y1="540" x2="300" y2="540" stroke="#555" stroke-width="5.5"/><line x1="200" y1="540" x2="300" y2="540" stroke="#fff" stroke-width="3"/>
+      <line x1="200" y1="565" x2="300" y2="565" stroke="#2e7d32"/>
+    </g>
+  </g>
+
+  <!-- ===== HX711 <-> ESP signals ===== -->
+  <g stroke-width="3" fill="none" stroke-linejoin="round">
+    <line x1="480" y1="285" x2="600" y2="285" stroke="#1976d2"/>
+    <line x1="480" y1="545" x2="600" y2="545" stroke="#7b1fa2"/>
+    <polyline points="600,415 540,415" stroke="#ef6c00"/>
+    <line x1="540" y1="325" x2="540" y2="505" stroke="#ef6c00"/>
+    <line x1="540" y1="325" x2="480" y2="325" stroke="#ef6c00"/>
+    <line x1="540" y1="505" x2="480" y2="505" stroke="#ef6c00"/>
+  </g>
+  <circle cx="540" cy="415" r="5" fill="#ef6c00"/>
+  <g font-size="12" font-weight="bold">
+    <text x="540" y="278" fill="#1976d2" text-anchor="middle">DT A</text>
+    <text x="570" y="408" fill="#ef6c00" text-anchor="middle">CLK</text>
+    <text x="570" y="538" fill="#7b1fa2" text-anchor="middle">DT B</text>
+  </g>
+
+  <!-- ===== OLED ===== -->
+  <rect x="1050" y="250" width="220" height="130" rx="6" fill="#263238" stroke="#000" stroke-width="2"/>
+  <rect x="1110" y="268" width="140" height="70" fill="#0b1a2a" stroke="#4fc3f7"/>
+  <text x="1180" y="296" font-size="11" fill="#4fc3f7" text-anchor="middle">Weight: 120 g</text>
+  <text x="1180" y="312" font-size="11" fill="#4fc3f7" text-anchor="middle">IP: 192.168.x.x</text>
+  <text x="1180" y="328" font-size="11" fill="#4fc3f7" text-anchor="middle">Buttons: -</text>
+  <text x="1160" y="365" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">SSD1306 128×64 · I²C 0x3C</text>
+  <g font-size="11" fill="#fff">
+    <text x="1058" y="294">SDA</text><text x="1058" y="344">SCL</text>
+    <text x="1080" y="266" text-anchor="middle">VCC</text>
+  </g>
+  <g stroke="#555" stroke-width="2">
+    <line x1="1080" y1="250" x2="1080" y2="232"/><line x1="1240" y1="380" x2="1240" y2="400"/>
+  </g>
+  <text x="1240" y="376" font-size="11" fill="#fff" text-anchor="middle"></text>
+  <use xlink:href="#vcc" x="1080" y="232"/><use xlink:href="#gnd" x="1240" y="400"/>
+  <text x="1262" y="397" font-size="11" fill="#555">GND</text>
+  <g stroke-width="3">
+    <line x1="900" y1="290" x2="1050" y2="290" stroke="#00897b"/>
+    <line x1="900" y1="340" x2="1050" y2="340" stroke="#5e35b1"/>
+  </g>
+  <g font-size="12" font-weight="bold">
+    <text x="975" y="283" fill="#00897b" text-anchor="middle">SDA</text>
+    <text x="975" y="333" fill="#5e35b1" text-anchor="middle">SCL</text>
+  </g>
+
+  <!-- ===== Enable / Trigger ===== -->
+  <rect x="440" y="95" width="290" height="75" rx="6" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="585" y="118" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">ENABLE IN</text>
+  <text x="585" y="138" font-size="11.5" fill="#555" text-anchor="middle">pull to GND = enabled (active low)</text>
+  <text x="585" y="155" font-size="11.5" fill="#555" text-anchor="middle">internal pull-up</text>
+  <rect x="770" y="95" width="320" height="75" rx="6" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+  <text x="930" y="118" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">TRIGGER OUT → Z-endstop</text>
+  <text x="930" y="138" font-size="11.5" fill="#555" text-anchor="middle">HIGH when enabled AND weight &gt; 90 g</text>
+  <text x="930" y="155" font-size="11.5" fill="#555" text-anchor="middle">3.3 V logic · share GND with printer</text>
+  <g stroke-width="3">
+    <line x1="660" y1="220" x2="660" y2="170" stroke="#ef6c00"/>
+    <line x1="840" y1="220" x2="840" y2="170" stroke="#1976d2"/>
+  </g>
+  <polygon points="660,176 654,188 666,188" fill="#ef6c00" transform="rotate(180 660 182)"/>
+  <polygon points="840,170 834,182 846,182" fill="#1976d2"/>
+
+  <!-- ===== Buttons ===== -->
+  <g stroke="#444" stroke-width="2.5">
+    <line x1="630" y1="760" x2="630" y2="816"/><line x1="630" y1="854" x2="630" y2="880"/>
+    <line x1="710" y1="760" x2="710" y2="816"/><line x1="710" y1="854" x2="710" y2="880"/>
+    <line x1="790" y1="760" x2="790" y2="816"/><line x1="790" y1="854" x2="790" y2="880"/>
+    <line x1="870" y1="760" x2="870" y2="816"/><line x1="870" y1="854" x2="870" y2="880"/>
+  </g>
+  <use xlink:href="#btn" x="630" y="820"/><use xlink:href="#btn" x="710" y="820"/>
+  <use xlink:href="#btn" x="790" y="820"/><use xlink:href="#btn" x="870" y="820"/>
+  <use xlink:href="#gnd" x="630" y="880"/><use xlink:href="#gnd" x="710" y="880"/>
+  <use xlink:href="#gnd" x="790" y="880"/><use xlink:href="#gnd" x="870" y="880"/>
+  <g font-size="13" font-weight="bold" fill="#333" text-anchor="middle">
+    <text x="630" y="915">BTN 1</text><text x="710" y="915">BTN 2</text>
+    <text x="790" y="915">BTN 3</text><text x="870" y="915">BTN 4</text>
+  </g>
+  <text x="630" y="932" font-size="11" fill="#666" text-anchor="middle">Tare</text>
+  <text x="750" y="955" font-size="11" fill="#666" text-anchor="middle">momentary to GND · internal pull-up</text>
+
+  <!-- ===== Legend ===== -->
+  <g font-size="12" fill="#444">
+    <text x="60" y="680" font-weight="bold" font-size="13">Load cell wires (typical colours — check your cell)</text>
+    <line x1="60" y1="700" x2="90" y2="700" stroke="#d32f2f" stroke-width="3.5"/><text x="98" y="704">Red · E+ (excitation +)</text>
+    <line x1="60" y1="722" x2="90" y2="722" stroke="#222" stroke-width="3.5"/><text x="98" y="726">Black · E− (excitation −)</text>
+    <line x1="60" y1="744" x2="90" y2="744" stroke="#555" stroke-width="5.5"/><line x1="60" y1="744" x2="90" y2="744" stroke="#fff" stroke-width="3"/><text x="98" y="748">White · A− (signal −)</text>
+    <line x1="60" y1="766" x2="90" y2="766" stroke="#2e7d32" stroke-width="3.5"/><text x="98" y="770">Green · A+ (signal +)</text>
+    <text x="60" y="805">Weight = (raw A + raw B − tare) / 560 per gram</text>
+    <use xlink:href="#vcc" x="1010" y="830"/><text x="1030" y="834">= ESP32 3V3 pin</text>
+    <use xlink:href="#gnd" x="1010" y="860"/><text x="1030" y="868">= common GND</text>
+  </g>
+</svg>
