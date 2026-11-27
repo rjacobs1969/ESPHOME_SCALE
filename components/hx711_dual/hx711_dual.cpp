@@ -12,6 +12,8 @@ void HX711DualSensor::setup() {
   dout_b_->setup();
   clk_->setup();
   clk_->digital_write(false);
+  // Run the main loop at full speed so a ready conversion is read immediately
+  high_freq_.start();
 }
 
 void HX711DualSensor::dump_config() {

@@ -25,6 +25,7 @@ class HX711DualSensor : public sensor::Sensor, public PollingComponent {
   GPIOPin *dout_b_{nullptr};
   GPIOPin *clk_{nullptr};
   int gain_{128};
+  HighFrequencyLoopRequester high_freq_;
 };
 
 }  // namespace hx711_dual

@@ -79,7 +79,7 @@ sensor:
     dout_pin_b: GPIO12
     clk_pin: GPIO10
     gain: 128
-    update_interval: 17ms
+    update_interval: 2ms
     filters:
       # remember the summed raw value for tare
       - lambda: |-
